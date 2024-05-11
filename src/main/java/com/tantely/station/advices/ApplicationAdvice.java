@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 @RestControllerAdvice
 public class ApplicationAdvice {
+    
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApplicationError handleNotFoundException(NotFoundException ex) {
