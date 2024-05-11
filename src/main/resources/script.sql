@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS products
 );
 
 
-CREATE TABLE IF NOT EXISTS product_in_station
+CREATE TABLE IF NOT EXISTS stocks
 (
     id   SERIAL PRIMARY KEY,
     station_id  INT REFERENCES stations (id),
