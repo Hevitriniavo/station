@@ -31,11 +31,11 @@ public class CreateProductAndStationImpl implements CreateProductAndStation {
     public Product createProduct(Product toCreate) {
         try {
             var stations = stationRepository.findAll();
-            if (stations.isEmpty()){
+            if (stations.isEmpty()) {
                 throw new BadRequestException("Station is empty");
             } else {
                 final var savedProduct = productRepository.create(toCreate);
-                for (var station : stations){
+                for (var station : stations) {
                     var evaporationRate = getEvaporationRate(savedProduct);
                     var stock = new Stock()
                             .setStationId(station.getId())
@@ -55,11 +55,11 @@ public class CreateProductAndStationImpl implements CreateProductAndStation {
     public Station createStation(Station toCreate) {
         try {
             var products = productRepository.findAll();
-            if (products.isEmpty()){
+            if (products.isEmpty()) {
                 return stationRepository.create(toCreate);
             } else {
                 var station = stationRepository.create(toCreate);
-                for (var product : products){
+                for (var product : products) {
                     var evaporationRate = getEvaporationRate(product);
                     var stock = new Stock()
                             .setStationId(station.getId())
