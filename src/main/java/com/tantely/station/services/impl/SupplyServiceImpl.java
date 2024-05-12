@@ -5,6 +5,7 @@ import com.tantely.station.entities.Stock;
 import com.tantely.station.entities.Transaction;
 import com.tantely.station.enums.TransactionType;
 import com.tantely.station.exceptions.BadRequestException;
+import com.tantely.station.exceptions.InternalServerException;
 import com.tantely.station.repositories.SupplyRepository;
 import com.tantely.station.repositories.TransactionRepository;
 import com.tantely.station.services.SupplyService;
@@ -47,7 +48,7 @@ public class SupplyServiceImpl implements SupplyService {
             transactionRepository.create(transaction);
             return stocked;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new InternalServerException(e.getMessage());
         }
     }
 }
