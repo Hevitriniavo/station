@@ -32,7 +32,9 @@ public class SupplyServiceImpl implements SupplyService {
             if (oldStock.isEmpty()) {
                 throw new BadRequestException("Stock not found");
             }
-            var newQuantity = oldStock.get().getQuantity() + toUpdate.getQuantity();
+            var requestQuantity = toUpdate.getQuantity();
+            var newQuantity = oldStock.get().getQuantity() + requestQuantity;
+
             toUpdate.setQuantity(newQuantity);
             var stocked = supplyRepository.updateStockByIdStationAndProduct(toUpdate);
             var transaction = new Transaction()
@@ -40,7 +42,7 @@ public class SupplyServiceImpl implements SupplyService {
                     .setStationId(toUpdate.getStationId())
                     .setProductId(toUpdate.getProductId())
                     .setType(TransactionType.ENTRY)
-                    .setQuantity(toUpdate.getQuantity())
+                    .setQuantity(requestQuantity)
                     .setDateTransaction(LocalDateTime.now());
             transactionRepository.create(transaction);
             return stocked;

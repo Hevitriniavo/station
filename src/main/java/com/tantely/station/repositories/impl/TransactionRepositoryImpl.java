@@ -6,6 +6,7 @@ import com.tantely.station.repositories.TransactionRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +45,19 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             }
         }
         return null;
+    }
+
+    @Override
+    public Optional<Transaction> findTransactionLastDate() throws SQLException {
+        final var query = "SELECT t.* FROM transactions t WHERE t.type = 'ENTRY' ORDER BY t.date_transaction DESC LIMIT 1";
+        try (final var stmt = connection.prepareStatement(query)) {
+            try (final var rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapResultSetToTransaction(rs));
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
