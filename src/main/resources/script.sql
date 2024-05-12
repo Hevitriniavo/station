@@ -43,3 +43,4 @@ CREATE TABLE IF NOT EXISTS transactions
     date_transaction TIMESTAMP   NOT NULL
 );
 
+SELECT t.date_transaction FROM transactions t WHERE type = 'ENTRY' GROUP BY t.date_transaction ORDER BY t.date_transaction DESC LIMIT 1;

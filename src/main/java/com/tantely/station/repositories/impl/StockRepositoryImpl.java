@@ -116,7 +116,7 @@ public class StockRepositoryImpl implements StockRepository {
         return new Stock()
                 .setId(rs.getInt("id"))
                 .setStationId(rs.getInt("station_id"))
-                .setProductId(rs.getInt("station_id"))
+                .setProductId(rs.getInt("product_id"))
                 .setQuantity(rs.getDouble("quantity"))
                 .setEvaporationRate(rs.getDouble("evaporation_rate"));
     }
