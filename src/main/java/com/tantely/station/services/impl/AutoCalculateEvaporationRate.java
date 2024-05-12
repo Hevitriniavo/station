@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Component
 public class AutoCalculateEvaporationRate {
@@ -24,14 +24,14 @@ public class AutoCalculateEvaporationRate {
         this.productRepository = productRepository;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 0 * * *")
     public void autoCalculateEvaporationRate() throws SQLException {
         var stocks = stockRepository.findAll();
         var lastTransactionOptional = transactionRepository.findTransactionLastDate();
         if (lastTransactionOptional.isPresent()){
             var lastTransaction = lastTransactionOptional.get();
             for (Stock stock : stocks) {
-                if (lastTransaction.getDateTransaction().isBefore(LocalDateTime.now())) {
+                if (lastTransaction.getDateTransaction().toLocalDate().isBefore(LocalDate.now())) {
                     var product = productRepository.findById(stock.getProductId()).orElse(null);
                     if (product != null){
                         var newQuantity = getQuantity(product, stock);
@@ -41,7 +41,8 @@ public class AutoCalculateEvaporationRate {
                                 .setProductId(stock.getProductId())
                                 .setQuantity(newQuantity)
                                 .setEvaporationRate(stock.getEvaporationRate());
-                        System.out.println(stockRepository.update(newStock));
+                        stockRepository.update(newStock);
+
                     }
                 }
             }
